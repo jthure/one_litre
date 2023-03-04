@@ -1,0 +1,39 @@
+<h1>Listing Players</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.game_show_path(@socket, :show, @game)}>
+    <.live_component
+      module={OneLitreWeb.PlayerLive.FormComponent}
+      id={@player.id || :new}
+      title={@page_title}
+      action={@live_action}
+      player={@player}
+      return_to={Routes.game_show_path(@socket, :show, @game)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="players">
+    <%= for player <- @players do %>
+      <tr id={"player-#{player.id}"}>
+        <td><%= player.name %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.player_show_path(@socket, :show, @game.id, player) %></span>
+          <span><%= live_patch "Edit", to: Routes.player_index_path(@socket, :edit, @game.id, player) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: player.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Player", to: Routes.player_index_path(@socket, :new, @game.id) %></span>

@@ -1,0 +1,19 @@
+FROM elixir:1.13.2-alpine 
+
+RUN apk update
+RUN apk add --no-cache build-base nodejs npm git python3 openssl ncurses-libs bash curl inotify-tools zsh
+RUN sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+RUN git config --global user.email "jonas@techendary.com"
+RUN git config --global user.name "Jonas Thuresson"
+
+# RUN apk add --no-cache docker-cli
+# RUN curl https://cli-assets.heroku.com/install.sh | sh
+
+
+SHELL ["/bin/zsh", "-l", "-c"]
+
+RUN mix do local.hex --force, local.rebar --force
+
+EXPOSE 4000
+
+CMD zsh

@@ -1,0 +1,1 @@
+heroku container:push web -a one-litre && heroku container:release web -a one-litre

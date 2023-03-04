@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  phoenix:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    environment: 
+      MIX_ENV: dev
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin@onelitre.com
+      PGADMIN_DEFAULT_PASSWORD: onelitre123
+    ports:
+      - "5001:80"
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+  #   volumes:
+  #     - ${PWD}/.pgadmin/servers.json:/pgadmin4/servers.json
+
+volumes: 
+  pgdata:
+  pgadmin:
+
